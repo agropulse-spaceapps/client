@@ -13,8 +13,6 @@ void main() async {
   runApp(MyApp());
 }
 
-bool kIsMobile = true;
-
 class MyApp extends StatefulWidget {
   MyApp({super.key});
 
@@ -87,9 +85,10 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     loginPage = LoginPage(handleSignIn: _handleSignIn);
     homePage = HomePage();
-    currentPage = loginPage;
+    currentPage = _googleSignIn.currentUser == null ? loginPage : homePage;
     _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount? account) {
       if (account != null) {
+        print("interchange");
         changePage();
       }
     });
@@ -97,8 +96,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    kIsMobile = true;
+    currentPage = _googleSignIn.currentUser == null ? loginPage : homePage;
     return MaterialApp(
       title: 'AgroPulse',
       theme: ThemeData(
@@ -119,7 +117,7 @@ class _MyAppState extends State<MyApp> {
         ),
         useMaterial3: true,
       ),
-      home: LoginPage(handleSignIn: _handleSignIn,),
+      home: currentPage,
     );
   }
 }

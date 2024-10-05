@@ -1,15 +1,131 @@
+enum Plant {
+  artichoke,
+  arugula,
+  asparagus,
+  beet,
+  bellPepper,
+  bokChoy,
+  broccoli,
+  brusselsSprouts,
+  cabbage,
+  carrot,
+  cauliflower,
+  celery,
+  chard,
+  collardGreens,
+  corn,
+  cucumber,
+  eggplant,
+  endive,
+  fennel,
+  garlic,
+  greenBean,
+  kale,
+  kohlrabi,
+  leek,
+  lettuce,
+  mushroom,
+  mustardGreens,
+  okra,
+  onion,
+  parsnip,
+  pea,
+  potato,
+  pumpkin,
+  radish,
+  rhubarb,
+  rutabaga,
+  scallion,
+  shallot,
+  spinach,
+  squash,
+  sweetPotato,
+  tomato,
+  turnip,
+  watercress,
+  yam,
+  zucchini,
+  apple,
+  apricot,
+  avocado,
+  banana,
+  blackberry,
+  blueberry,
+  cherry,
+  coconut,
+  cranberry,
+  date,
+  dragonFruit,
+  durian,
+  elderberry,
+  fig,
+  gooseberry,
+  grape,
+  grapefruit,
+  guava,
+  kiwi,
+  lemon,
+  lime,
+  lychee,
+  mango,
+  melon,
+  nectarine,
+  orange,
+  papaya,
+  passionFruit,
+  peach,
+  pear,
+  pineapple,
+  plum,
+  pomegranate,
+  raspberry,
+  strawberry,
+  tangerine,
+  watermelon,
+  // Add more plants as needed
+}
+
 class Field {
-  final String name;
-  final String location;
-  final String area;
-  final String crop;
-  final String date;
+  final double organicMatter = 3.5;
+  int? rain; // per mm^2
+  double? temperature;
+  int? yp;
+  String name;
+  int area;
+  // optional
+  double? ph;
+  int? soilState;
+  int? soilHumidity; 
+  double? nitrogen;
+  double? phosphorus;
+  int? potassium;
+  double? finalResult;
+  Plant crop;
+
+  // TODO: add location
+  // location based variables: temperature, rain
+  // user based variables: ph, soilState, soilHumidity, nitrogen, phosphorus, potassium 
+
+  void recalculate() {
+    // double v=(ph+organicMatter+soilState)/3;
+    // double c=(temperature+rain+soilHumidity)/3;
+    // double m=(nitrogen+phosphorus+potassium)/3;
+    // double w=(soilState+soilHumidity+rain)/3;
+    // double yield=v*c*m*w;
+    // finalResult = yield*yp;
+  }
 
   Field({
     required this.name,
-    required this.location,
+    required this.ph,
+    required this.soilState,
+    required this.soilHumidity,
+    required this.nitrogen,
+    required this.phosphorus,
+    required this.potassium,
     required this.area,
     required this.crop,
-    required this.date,
-  });
+  }) {
+    recalculate();
+  } // TODO: require location
 }

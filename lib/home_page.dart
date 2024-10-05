@@ -1,3 +1,4 @@
+import 'package:agropulse/add_field_page.dart';
 import 'package:agropulse/field.dart';
 import 'package:flutter/material.dart';
 
@@ -9,34 +10,36 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List <Field>? fields;
+  List <Field> fields = [];
 
   @override
   void initState() {
     super.initState();
-    fields = [
+    fields = [ // get with mongoDB
       Field(
-        name: 'Field 1',
-        location: 'Location 1',
-        area: 'Area 1',
-        crop: 'Crop 1',
-        date: 'Date 1',
-      ),
-      Field(
-        name: 'Field 2',
-        location: 'Location 2',
-        area: 'Area 2',
-        crop: 'Crop 2',
-        date: 'Date 2',
-      ),
-      Field(
-        name: 'Field 3',
-        location: 'Location 3',
-        area: 'Area 3',
-        crop: 'Crop 3',
-        date: 'Date 3',
+        name: 'Field of bananas',
+        area: 999,
+        crop : Plant.banana, 
+        ph: 6.5,
+        soilState: 1,
+        soilHumidity: 1,
+        nitrogen: 1.5,
+        phosphorus: 1.5,
+        potassium: 1,
       ),
     ];
+  }
+
+  void addField(Field field) { // update with mongoDB
+    setState(() {
+      fields.add(field);
+    });
+  }
+
+  void eraseField(Field field) { // update with mongoDB
+    setState(() {
+      fields.add(field);
+    });
   }
 
   @override
@@ -57,15 +60,16 @@ class _HomePageState extends State<HomePage> {
           ElevatedButton(
             onPressed: () {
               setState(() {
-              fields!.add(
-                Field(
-                name: 'New Field',
-                location: 'New Location',
-                area: 'New Area',
-                crop: 'New Crop',
-                date: 'New Date',
-                ),
-              );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AddFieldPage(
+                      onFieldAdded: (newField) {
+                        addField(newField);
+                      },
+                    ),
+                  ),
+                );
               });
             },
             child: const Text('Add Field'),
@@ -97,13 +101,23 @@ class FieldView extends StatelessWidget {
     return Card(
       child: ListTile(
         title: Text(field.name),
-        subtitle: Column(
+        subtitle: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(field.location),
-            Text(field.area),
-            Text(field.crop),
-            Text(field.date),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Area: ${field.area} sqm',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
