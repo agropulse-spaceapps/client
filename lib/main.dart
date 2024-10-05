@@ -13,6 +13,8 @@ void main() async {
   runApp(MyApp());
 }
 
+bool kIsMobile = true;
+
 class MyApp extends StatefulWidget {
   MyApp({super.key});
 
@@ -37,14 +39,14 @@ class _MyAppState extends State<MyApp> {
       final GoogleSignInAccount? account = await _googleSignIn.signIn();
       print("Signed in...");
       if (account != null) {
-        /* print(account.toJSBox);
+        print(jsonEncode(account));
         
         final GoogleSignInAuthentication auth = await account.authentication;
         final String idToken = auth.idToken!;
         final String accessToken = auth.accessToken!;
 
         final response = await http.post(
-          Uri.parse('https://your-server.com/auth/google'),
+          Uri.parse('https://agrepulse.web.tr/auth/google/callback'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
@@ -59,7 +61,7 @@ class _MyAppState extends State<MyApp> {
           print('Successfully sent to server: $responseData');
         } else {
           print('Failed to send to server: ${response.body}');
-        } */
+        }
       }
     } catch (error) {
       print(error);
@@ -68,29 +70,13 @@ class _MyAppState extends State<MyApp> {
 
   GoogleSignInAccount? get currentUser => _googleSignIn.currentUser;
 
-  late final loginPage = LoginPage(handleSignIn: _handleSignIn);
-  late final homePage = HomePage();
-
-  late Widget currentPage = loginPage;
-
-  void changePage() {
-    setState(() {
-      currentPage = homePage;      
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount? account) {
-      if (account != null) {
-        changePage();
-      }
-    });
-  }
+  // final loginPage = LoginPage(handleSignIn: _handleSignIn);
+  // final homePage = HomePage();
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    kIsMobile = true;
     return MaterialApp(
       title: 'AgroPulse',
       theme: ThemeData(
@@ -111,7 +97,7 @@ class _MyAppState extends State<MyApp> {
         ),
         useMaterial3: true,
       ),
-      home: currentPage,
+      home: LoginPage(handleSignIn: _handleSignIn,),
     );
   }
 }
