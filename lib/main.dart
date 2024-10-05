@@ -1,15 +1,63 @@
+import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'login_page.dart';
+import 'package:http/http.dart' as http;
 
 void main() async {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 bool kIsMobile = true;
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
+
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+    clientId: kIsWeb
+        ? '547716123620-jhjgron0hud5t61pelm7on3lalmoiepf.apps.googleusercontent.com'
+        : '547716123620-rg31847rudsg23rg89k9e2st9l58hvok.apps.googleusercontent.com',
+    scopes: [
+      'email',
+      'https://www.googleapis.com/auth/contacts.readonly',
+    ],
+  );
+
+  Future<void> _handleSignIn() async {
+    try {
+      final GoogleSignInAccount? account = await _googleSignIn.signIn();
+      if (account != null) {
+        final GoogleSignInAuthentication auth = await account.authentication;
+        final String idToken = auth.idToken!;
+        final String accessToken = auth.accessToken!;
+
+        final response = await http.post(
+          Uri.parse('https://your-server.com/auth/google'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(<String, String>{
+            'idToken': idToken,
+            'accessToken': accessToken,
+          }),
+        );
+
+        if (response.statusCode == 200) {
+          final responseData = jsonDecode(response.body);
+          print('Successfully sent to server: $responseData');
+        } else {
+          print('Failed to send to server: ${response.body}');
+        }
+      }
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  GoogleSignInAccount? get currentUser => _googleSignIn.currentUser;
 
   @override
   Widget build(BuildContext context) {
@@ -22,12 +70,12 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.interTextTheme(
           Theme.of(context).textTheme.copyWith(
             headlineSmall: GoogleFonts.inter(
-              fontSize: 24,
+              fontSize: 36,
               fontWeight: FontWeight.w500,
               color: Colors.black,
             ),
             headlineLarge: GoogleFonts.inter(
-              fontSize: 32,
+              fontSize: 48,
               fontWeight: FontWeight.w700,
               color: Colors.black,
             ),
@@ -35,7 +83,7 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: LoginPage(),
+      home: LoginPage(handleSignIn: _handleSignIn,),
     );
   }
 }
