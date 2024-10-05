@@ -55,8 +55,7 @@ class _MyAppState extends State<MyApp> {
         );
 
         if (response.statusCode == 200) {
-          print("checkpoint");
-          final responseData = response.body;
+          final responseData = jsonDecode(response.body);
           print('Successfully sent to server: $responseData');
         } else {
           print('Failed to send to server: ${response.body}');
