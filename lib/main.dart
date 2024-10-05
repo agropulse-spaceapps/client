@@ -39,22 +39,14 @@ class _MyAppState extends State<MyApp> {
       final GoogleSignInAccount? account = await _googleSignIn.signIn();
       print("Signed in...");
       if (account != null) {
-<<<<<<< HEAD
-        print(jsonEncode(account));
-=======
         print(account.toJSBox);
->>>>>>> 7d90ad2 (fix: working http request)
         
         final GoogleSignInAuthentication auth = await account.authentication;
         final String idToken = auth.idToken!;
         final String accessToken = auth.accessToken!;
 
         final response = await http.post(
-<<<<<<< HEAD
-          Uri.parse('https://agrepulse.web.tr/auth/google/callback'),
-=======
           Uri.parse('https://agropulse.web.tr/api/data'),
->>>>>>> 7d90ad2 (fix: working http request)
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
@@ -78,10 +70,6 @@ class _MyAppState extends State<MyApp> {
 
   GoogleSignInAccount? get currentUser => _googleSignIn.currentUser;
 
-<<<<<<< HEAD
-  // final loginPage = LoginPage(handleSignIn: _handleSignIn);
-  // final homePage = HomePage();
-=======
   Widget? loginPage;
   Widget? homePage;
 
@@ -105,7 +93,6 @@ class _MyAppState extends State<MyApp> {
       }
     });
   }
->>>>>>> 7d90ad2 (fix: working http request)
 
   @override
   Widget build(BuildContext context) {
