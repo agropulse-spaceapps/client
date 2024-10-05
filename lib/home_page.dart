@@ -68,16 +68,38 @@ class _HomePageState extends State<HomePage> {
           Expanded(
             child: ListView.builder(
               itemCount: fields!.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(fields![index].name),
-                  subtitle: Text(fields![index].location),
-                  trailing: Text(fields![index].date),
-                );
+              itemBuilder: (field, index) {
+                return FieldView(field: fields![index]);
               },
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class FieldView extends StatelessWidget {
+  final Field field;
+
+  FieldView({
+    required this.field,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: ListTile(
+        title: Text(field.name),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(field.location),
+            Text(field.area),
+            Text(field.crop),
+            Text(field.date),
+          ],
+        ),
       ),
     );
   }
