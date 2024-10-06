@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyCUdvrpjxt148BXxWWo3wmRay6vZcsI0J8"/>
         android:label="agropulse"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">

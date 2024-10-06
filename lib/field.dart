@@ -1,3 +1,5 @@
+import 'package:map_location_picker/map_location_picker.dart';
+
 enum Plant {
   artichoke,
   arugula,
@@ -90,8 +92,10 @@ class Field {
   int? rain; // per mm^2
   double? temperature;
   int? yp;
-  String name;
-  int area;
+
+  final String name;
+  final int area;
+  final GeocodingResult location;
   // optional
   double? ph;
   int? soilState;
@@ -100,7 +104,7 @@ class Field {
   double? phosphorus;
   int? potassium;
   double? finalResult;
-  Plant crop;
+  Plant? crop;
 
   // TODO: add location
   // location based variables: temperature, rain
@@ -117,14 +121,15 @@ class Field {
 
   Field({
     required this.name,
-    required this.ph,
-    required this.soilState,
-    required this.soilHumidity,
-    required this.nitrogen,
-    required this.phosphorus,
-    required this.potassium,
+    this.ph,
+    this.soilState,
+    this.soilHumidity,
+    this.nitrogen,
+    this.phosphorus,
+    this.potassium,
     required this.area,
-    required this.crop,
+    this.crop,
+    required this.location,
   }) {
     recalculate();
   } // TODO: require location

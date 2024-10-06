@@ -37,22 +37,21 @@ class _MyAppState extends State<MyApp> {
       final GoogleSignInAccount? account = await _googleSignIn.signIn();
       print("Signed in...");
       if (account != null) {
-        print(account.toJSBox);
+        // print(account.toJSBox);
         
         final GoogleSignInAuthentication auth = await account.authentication;
-        final String idToken = auth.idToken!;
+        // final String idToken = auth.idToken!;
         final String accessToken = auth.accessToken!;
 
-        final response = await http.post(
-          Uri.parse('https://agropulse.web.tr/api/data'),
+        final url = 'https://agropulse.web.tr/api/get?accessToken=${Uri.encodeComponent(accessToken)}';
+
+        final response = await http.get(
+          Uri.parse(url),  // Use Uri.parse() for a full URL
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
-          body: jsonEncode(<String, String>{
-            'idToken': idToken,
-            'accessToken': accessToken,
-          }),
         );
+
 
         if (response.statusCode == 200) {
           final responseData = jsonDecode(response.body);
@@ -109,6 +108,11 @@ class _MyAppState extends State<MyApp> {
             ),
             headlineLarge: GoogleFonts.inter(
               fontSize: 48,
+              fontWeight: FontWeight.w700,
+              color: Colors.black,
+            ),
+            bodyLarge: GoogleFonts.inter(
+              fontSize: 24,
               fontWeight: FontWeight.w700,
               color: Colors.black,
             ),
