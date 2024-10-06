@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:js_interop';
 
 import 'package:agropulse/home_page.dart';
 import 'package:flutter/foundation.dart';

@@ -13,22 +13,13 @@ class AddFieldPage extends StatelessWidget {
   final TextEditingController _phosphorus = TextEditingController();
   final TextEditingController _potassium = TextEditingController();
   final TextEditingController _area = TextEditingController();
+  final TextEditingController _organicMatter = TextEditingController();
   Plant? _crop;
 
   AddFieldPage({Key? key, required this.onFieldAdded}) : super(key: key);
 
   void tryParseInputs(BuildContext context) {
     try {
-      print(_name.text);
-      print(_ph.text);
-      print(_soilState.text);
-      print(_soilHumidity.text);
-      print(_nitrogen.text);
-      print(_phosphorus.text);
-      print(_potassium.text);
-      print(_area.text);
-      print(_crop);
-
       String name = _name.text;
       double ph = double.parse(_ph.text);
       int soilState = int.parse(_soilState.text);
@@ -37,17 +28,22 @@ class AddFieldPage extends StatelessWidget {
       double phosphorus = double.parse(_phosphorus.text);
       int potassium = int.parse(_potassium.text);
       int area = int.parse(_area.text);
+      double organicMatter = double.parse(_organicMatter.text);
+
       Plant crop = _crop!;
       Field field = Field(
         name: name,
-        ph: ph,
-        soilState: soilState,
-        soilHumidity: soilHumidity,
-        nitrogen: nitrogen,
-        phosphorus: phosphorus,
-        potassium: potassium,
+        soil: Stats(
+          organicMatter: organicMatter,
+          ph: ph,
+          soilState: soilState,
+          humidity: soilHumidity,
+          nitrogen: nitrogen,
+          phosphorus: phosphorus,
+          potassium: potassium,
+        ),
         area: area,
-        crop: crop,
+        cropType: crop,
         location: location!,
       );
       onFieldAdded(field);
@@ -94,6 +90,14 @@ class AddFieldPage extends StatelessWidget {
                   controller: _name,
                   decoration: const InputDecoration(
                     labelText: 'Field Name',
+                  ),
+                ),
+                const SizedBox(height: 24),
+                TextField(
+                  controller: _area,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                  labelText: 'Area',
                   ),
                 ),
                 Row(
@@ -168,39 +172,56 @@ class AddFieldPage extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 24),
-                TextField(
-                  controller: _area,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                  labelText: 'Area',
-                  ),
-                ),
-                const SizedBox(height: 24),
-                SelectCrop(
-                  onCropSelected: (Plant? crop) {
-                    _crop = crop;
-                  },
-                ),
-                const SizedBox(height: 24),
                 Row(
                   children: [
+                    Expanded(
+                      child: TextField(
+                        controller: _organicMatter,
+                        decoration: const InputDecoration(
+                          labelText: 'Organic Matter',
+                        ),
+                        keyboardType: TextInputType.number,
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    Expanded(
+                      child: SelectCrop(
+                        onCropSelected: (Plant? crop) {
+                          _crop = crop;
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 60),
+                Row(
+                  children: [
+                    const Spacer(),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.grey,
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
                         textStyle: const TextStyle(fontSize: 16),
+                        maximumSize: const Size(120, 48),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4),
+                        ),
                       ),
                       onPressed: () {
                       Navigator.pop(context);
                       },
                       child: const Text('Back', style: TextStyle(color: Colors.white)),
                     ),
-                    const Spacer(),
+                    const SizedBox(width: 24),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
                         textStyle: const TextStyle(fontSize: 16),
+                        maximumSize: const Size(120, 48),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4),
+                        ),
                       ),
                       onPressed: () {
                         tryParseInputs(context);
@@ -209,7 +230,7 @@ class AddFieldPage extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 48),
+                const SizedBox(height: 60),
               ],
             ),
           ),
@@ -246,11 +267,15 @@ class _SelectCropState extends State<SelectCrop> {
       items: Plant.values.map((Plant plant) {
         return DropdownMenuItem<Plant>(
           value: plant,
-          child: Text(plant.toString().split('.').last),
+          child: Container(
+            height: 100, // Increase the height of the dropdown items
+            alignment: Alignment.center,
+            child: Text(plant.toString().split('.').last, style: Theme.of(context).textTheme.bodyLarge,),
+          ),
         );
-      }).toList() + [const DropdownMenuItem<Plant>(
+      }).toList() + [DropdownMenuItem<Plant>(
         value: null,
-        child: Text('Select Crop'),
+        child: Text('Select Crop', style: Theme.of(context).textTheme.bodyLarge,),
       )],
       onChanged: _handleCropSelected,
     );

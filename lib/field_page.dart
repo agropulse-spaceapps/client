@@ -1,40 +1,30 @@
+import 'package:agropulse/field.dart';
 import 'package:flutter/material.dart';
 
 class FieldPage extends StatelessWidget {
-  final String name;
-  final String location;
-  final String area;
-  final String crop;
-  final String date;
+  final Field field;
 
   FieldPage({
     Key? key,
-    required this.name,
-    required this.location,
-    required this.area,
-    required this.crop,
-    required this.date,
+    required this.field,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(name),
+        title: Text(field.name),
       ),
       body: Column(
         children: [
           ListTile(
-            title: Text('Location: $location'),
+            title: Text('Location: ${field.location.addressComponents.first.shortName}'),
           ),
           ListTile(
-            title: Text('Area: $area'),
+            title: Text('Area: ${field.area} m²'),
           ),
           ListTile(
-            title: Text('Crop: $crop'),
-          ),
-          ListTile(
-            title: Text('Date: $date'),
+            title: Text('Crop: ${field.cropType}'),
           ),
         ],
       ),

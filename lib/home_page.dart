@@ -1,5 +1,6 @@
 import 'package:agropulse/add_field_page.dart';
 import 'package:agropulse/field.dart';
+import 'package:agropulse/field_page.dart';
 import 'package:flutter/material.dart';
 import 'package:map_location_picker/map_location_picker.dart';
 
@@ -17,27 +18,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     fields = [ // get with mongoDB
-      Field(
-        name: 'Field of bananas',
-        area: 999,
-        crop : Plant.banana, 
-        ph: 6.5,
-        soilState: 1,
-        soilHumidity: 1,
-        nitrogen: 1.5,
-        phosphorus: 1.5,
-        potassium: 1,
-        location: GeocodingResult(
-          formattedAddress: 'Istanbul, Turkey',
-          placeId: '1',
-          geometry: Geometry(
-            location: Location(
-              lat: 41.0082,
-              lng: 28.9784,
-            ),
-          ),
-        ),
-      ),
+      
     ];
   }
 
@@ -57,22 +38,21 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: const Row(
-          children: [
-            Text('AgroPulse'),
-            Spacer()
-          ],
-        ),
-        centerTitle: false,
-      ),
       body: Center(
         child: FractionallySizedBox(
           widthFactor: 0.9,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 48.0, left: 16),
+                    child: Text('AgroPulse', style: Theme.of(context).textTheme.bodyLarge),
+                  ),
+                  const Spacer()
+                ],
+              ),
               const SizedBox(height: 20),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
@@ -101,12 +81,32 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 18),
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16),
+                    child: Text('My fields', style: Theme.of(context).textTheme.headlineSmall),
+                  ),
+                  const Spacer(),
+                  const Icon(Icons.edit, size: 36, color: Colors.black,),
+                ],
+              ),
+              const SizedBox(height: 18),
+              ColoredBox(color: Colors.grey[500]!, child: SizedBox(height: 3, width: MediaQuery.of(context).size.width * 0.9),),
+              const SizedBox(height: 18),
               Expanded(
                 child: ListView.builder(
                   itemCount: fields.length,
                   itemBuilder: (field, index) {
-                    return FieldView(field: fields[index]);
+                    return Column(
+                      children: [
+                        FieldView(field: fields[index]),
+                        const SizedBox(height: 8),
+                        ColoredBox(color: Colors.grey[500]!, child: SizedBox(height: 2, width: MediaQuery.of(context).size.width * 0.7),),
+                        const SizedBox(height: 8),
+                      ],
+                    );
                   },
                 ),
               ),
@@ -128,12 +128,19 @@ class FieldView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: null,
-      child: Card(
-        color: Colors.grey[300],
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => FieldPage(field: field),
+          ),
+        );
+      },
+      child: Container(
+        color: Colors.white,
         child: Container(
           height: 80,
-          margin: EdgeInsets.all(10),
+          margin: const EdgeInsets.all(10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -142,7 +149,7 @@ class FieldView extends StatelessWidget {
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text('Crop: ${field.crop!.name}'),
+                  Text('Crop: ${field.cropType!.name}'),
                   const Spacer(),
                   Text('Area: ${field.area}m²'),
                 ],
