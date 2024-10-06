@@ -18,7 +18,52 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     fields = [ // get with mongoDB
-      
+      Field (
+        name: "Fasulye Tarlası", 
+        soil: Stats(
+          ph: 6.5, 
+          soilState: 12, 
+          humidity: 45, 
+          nitrogen: 20.0, 
+          phosphorus: 15.0, 
+          potassium: 15, 
+          organicMatter: 5.0
+        ), 
+        area: 1280, 
+        location: GeocodingResult(
+          placeId: "Istanbul",
+          geometry: Geometry(
+            location: Location(
+              lat: 41.0082, 
+              lng: 28.9784
+            )
+          )
+        ),
+        cropType: Plant.beans,
+      ),
+      Field(
+        name: "Buğday Tarlası",
+        soil: Stats(
+          ph: 7.0,
+          soilState: 10,
+          humidity: 50,
+          nitrogen: 25.0,
+          phosphorus: 20.0,
+          potassium: 20,
+          organicMatter: 6.0,
+        ),
+        area: 1500,
+        location: GeocodingResult(
+          placeId: "Ankara",
+          geometry: Geometry(
+            location: Location(
+              lat: 39.9334,
+              lng: 32.8597,
+            ),
+          ),
+        ),
+        cropType: Plant.wheat,
+      ),
     ];
   }
 

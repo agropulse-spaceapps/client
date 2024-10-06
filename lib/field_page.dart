@@ -18,13 +18,13 @@ class FieldPage extends StatelessWidget {
       body: Column(
         children: [
           ListTile(
-            title: Text('Location: ${field.location.addressComponents.first.shortName}'),
+            title: Text('Location: ${field.location.addressComponents}'),
           ),
           ListTile(
             title: Text('Area: ${field.area} m²'),
           ),
           ListTile(
-            title: Text('Crop: ${field.cropType}'),
+            title: Text('Crop: ${field.cropType!.name}'),
           ),
         ],
       ),
