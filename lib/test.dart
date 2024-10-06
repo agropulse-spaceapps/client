@@ -9,6 +9,7 @@ void main () {
         onNext: (GeocodingResult? result) {
           print(result);
         },
+        mapStyle: "Satellite",
       ),
     ),
   ));
