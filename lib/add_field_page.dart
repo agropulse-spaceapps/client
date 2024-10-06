@@ -19,6 +19,16 @@ class AddFieldPage extends StatelessWidget {
 
   void tryParseInputs(BuildContext context) {
     try {
+      print(_name.text);
+      print(_ph.text);
+      print(_soilState.text);
+      print(_soilHumidity.text);
+      print(_nitrogen.text);
+      print(_phosphorus.text);
+      print(_potassium.text);
+      print(_area.text);
+      print(_crop);
+
       String name = _name.text;
       double ph = double.parse(_ph.text);
       int soilState = int.parse(_soilState.text);
@@ -41,6 +51,7 @@ class AddFieldPage extends StatelessWidget {
         location: location!,
       );
       onFieldAdded(field);
+      Navigator.pop(context);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please check your inputs and try again')),
@@ -74,7 +85,7 @@ class AddFieldPage extends StatelessWidget {
                   child: MapLocationPicker (
                     apiKey: "AIzaSyCUdvrpjxt148BXxWWo3wmRay6vZcsI0J8",
                     onNext: (GeocodingResult? result) {
-                      print(result);
+                      location = result;
                     },
                   ),
                 ),
